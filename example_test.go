@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/exec"
 	"sync"
+	"syscall"
 	"time"
 
 	"github.com/jimmidyson/multicmd"
@@ -167,7 +168,7 @@ func ExamplePropagateSignals() {
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
-		if err := multicmd.StartAndWaitWithPropagatedSignals(cmds); err != nil {
+		if err := multicmd.StartAndWaitWithPropagatedSignals(cmds, os.Interrupt, syscall.SIGTERM); err != nil {
 			fmt.Println(err)
 		}
 		fmt.Println(cmd1.ProcessState.ExitCode())
